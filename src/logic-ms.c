@@ -961,16 +961,16 @@ static bool Actor_can_make_move(Actor* self,
     }
     if (TileID_is_actor(floor)) {
       /* turning tank cloning patch */
-      Actor* F = Level_look_up_creature(level, to, false);
+      Actor* to_actor = Level_look_up_creature(level, to, false);
       if (!(flags & CMM_CLONECANTBLOCK)) /* not cloning */
         return false;
-      if ((F == NULL || !(F->state & CS_TURNING)) &&
+      if ((to_actor == NULL || !(to_actor->state & CS_TURNING)) &&
           floor == TileID_actor_with_dir(self->id, self->direction))
         return true;
       /* must check "floor", so same-dir non-creature tank will clone */
-      if (F == NULL)
+      if (to_actor == NULL)
         return false;
-      if (F->direction == self->direction)
+      if (to_actor->direction == self->direction)
         return true;
       return false;
     }
