@@ -36,6 +36,7 @@ protected:
     level = res_level.value;
 
     solution = TWSSet_get_solution_by_password(tws_set, level->metadata->password);
+    ASSERT_NE(solution, nullptr);
     Result_GameInputList res3 = TWSMetadata_prepare_inputs(solution);
     ASSERT_TRUE(res3.success);
     input_list = res3.value;
@@ -418,6 +419,7 @@ namespace {
   TEST_F(CIDPatchTestsTWS, Level24) {
     LoadLevelTws(24);
     test_level(level, solution, &input_list);
+    EXPECT_EQ(Level_get_win_state(level), TRIRES_SUCCESS);
   }
 
   TEST_F(CIDPatchTestsTWS, Level25) {

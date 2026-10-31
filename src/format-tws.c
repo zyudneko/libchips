@@ -293,9 +293,7 @@ Result_TWSSetPtr parse_tws(uint8_t const* data, size_t data_len) {
       data += 2;
       memcpy(&level.password, data, 4);
       data += 4;
-      if (size == 6) {
-        TWSSet_add_level(set, &level);
-      } else {
+      if (size > 6) {
         size -= 6;
         assert_data_avail(10);
         level.other_flags = *data;
