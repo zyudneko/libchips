@@ -6,16 +6,15 @@ extern "C" {
 }
 
 #include "data/ccl/ccl_embeds.h"
+#include "data/tws/tws_embeds.h"
 
-class TrapDatLogicTestMS : public testing::Test { // Put into its own since editing a trap DAT will require manual editing after
+class GenericLogicTestMS : public testing::Test {
 protected:
-  LevelSet* level_set;
+  LevelSet* level_set = nullptr;
+  TWSSet* tws_set = nullptr;
   Level* level = nullptr;
-  TrapDatLogicTestMS() {
-    Result_LevelSetPtr res = parse_ccl(TrapDatTestsMS_ccl, sizeof(TrapDatTestsMS_ccl));
-    EXPECT_TRUE(res.success);
-    level_set = res.value;
-  }
+  TWSMetadata* solution = nullptr;
+  GameInputList input_list = {};
 
   void LoadLevel(char const pass[10]) {
     if (level != nullptr)
@@ -24,6 +23,18 @@ protected:
     Result_LevelPtr res_level = LevelMetadata_make_level(LevelSet_get_level_by_pass(level_set, pass), &ms_logic);
     ASSERT_TRUE(res_level.success);
     level = res_level.value;
+  }
+
+  void LoadLevelTWS(char const pass[4]) {
+    if (input_list.inputs != nullptr)
+      GameInputList_free(&input_list);
+    LoadLevel(pass);
+
+    solution = TWSSet_get_solution_by_password(tws_set, level->metadata->password);
+    ASSERT_NE(solution, nullptr);
+    Result_GameInputList res3 = TWSMetadata_prepare_inputs(solution);
+    ASSERT_TRUE(res3.success);
+    input_list = res3.value;
   }
 
   void TickLevel(GameInput input) {
@@ -36,6 +47,28 @@ protected:
   void QuadTickLevel(GameInput input) {
     TickLevel(input);
     TickLevel(INPUT_NIL);
+  }
+};
+
+class TrapDatLogicTestMS : public GenericLogicTestMS { // Put into its own since editing a trap DAT will require manual editing after
+protected:
+  TrapDatLogicTestMS() : GenericLogicTestMS() {
+    Result_LevelSetPtr res = parse_ccl(TrapDatTestsMS_ccl, sizeof(TrapDatTestsMS_ccl));
+    EXPECT_TRUE(res.success);
+    level_set = res.value;
+  }
+};
+
+class RegressionDatLogicTestMS : public GenericLogicTestMS {
+protected:
+  RegressionDatLogicTestMS() : GenericLogicTestMS() {
+    Result_LevelSetPtr res = parse_ccl(RegressionTestsMS_ccl, sizeof(RegressionTestsMS_ccl));
+    EXPECT_TRUE(res.success);
+    level_set = res.value;
+
+    Result_TWSSetPtr res2 = parse_tws(RegressionTests_ms_tws, sizeof(RegressionTests_ms_tws));
+    EXPECT_TRUE(res2.success);
+    tws_set = res2.value;
   }
 };
 
@@ -200,5 +233,10 @@ namespace {
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(2, 5)), TILE_BLOCK_STATIC);
     EXPECT_EQ(Level_get_bottom_terrain(level, Position_from_xy(2, 5)), TILE_TRAP);
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(2, 4)), TILE_FLOOR);
+  }
+
+  TEST_F(RegressionDatLogicTestMS, MismatchedCloneIntoDirection) {
+    LoadLevelTWS("YMEG");
+    test_level(level, solution, &input_list);
   }
 }

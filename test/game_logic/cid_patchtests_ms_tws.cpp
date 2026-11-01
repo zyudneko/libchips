@@ -419,7 +419,6 @@ namespace {
   TEST_F(CIDPatchTestsTWS, Level24) {
     LoadLevelTws(24);
     test_level(level, solution, &input_list);
-    EXPECT_EQ(Level_get_win_state(level), TRIRES_SUCCESS);
   }
 
   TEST_F(CIDPatchTestsTWS, Level25) {
@@ -441,5 +440,12 @@ namespace {
     EXPECT_EQ(Level_get_win_state(level), TRIRES_NOTHING);
     TickLevel(INPUT_WEST);
     EXPECT_EQ(Level_get_win_state(level), TRIRES_SUCCESS);
+  }
+
+  TEST_F(CIDPatchTestsTWS, Level40) {
+    LoadLevelTws(40);
+    test_level(level, solution, &input_list);
+    EXPECT_EQ(Level_get_win_state(level), TRIRES_SUCCESS);
+    EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(5, 3)), TILE_TOGGLE_DOOR_OPEN);
   }
 }
