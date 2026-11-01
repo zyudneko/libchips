@@ -330,4 +330,8 @@ const uint8_t CID_PatchTests_ms_tws[] = {
 #embed "ChosenID/PATCH-TESTS-MS.tws"
 };
 
+const uint8_t RegressionTests_ms_tws[] = {
+#embed "Misc/RegressionTests-MS.tws"
+};
+
 #endif //LIBCHIPS_TWS_EMBEDS_H

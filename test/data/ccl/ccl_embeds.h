@@ -174,4 +174,8 @@ const uint8_t TrapDatTestsMS_ccl[] = {
 #embed "Misc/TrapDatTestsMS.ccl"
 };
 
+const uint8_t RegressionTestsMS_ccl[] = {
+#embed "Misc/RegressionTestsMS.ccl"
+};
+
 #endif //LIBCHIPS_CCL_EMBEDS_H
