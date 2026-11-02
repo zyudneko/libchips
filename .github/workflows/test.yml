@@ -1,0 +1,15 @@
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          submodules: 'true'
+      - name: Meson Build
+        uses: BSFishy/meson-build@v1.0.3
+        with:
+          meson-version: 1.12.1
+          action: test
