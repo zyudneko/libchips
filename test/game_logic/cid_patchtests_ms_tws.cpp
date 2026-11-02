@@ -25,13 +25,13 @@ protected:
     tws_set = res2.value;
   }
 
-  void LoadLevelTws(uint16_t num) {
+  void LoadLevelTws(char const pass[4]) {
     if (level != nullptr)
       Level_free(level);
     if (input_list.inputs != nullptr)
       GameInputList_free(&input_list);
 
-    Result_LevelPtr res_level = LevelMetadata_make_level(LevelSet_get_level(level_set, num - 1), &ms_logic);
+    Result_LevelPtr res_level = LevelMetadata_make_level(LevelSet_get_level_by_pass(level_set, pass), &ms_logic);
     ASSERT_TRUE(res_level.success);
     level = res_level.value;
 
@@ -58,33 +58,33 @@ protected:
 };
 
 namespace {
-  TEST_F(CIDPatchTestsTWS, Level1) {
-    LoadLevelTws(1);
+  TEST_F(CIDPatchTestsTWS, ImmediateButtonPress) {
+    LoadLevelTws("ANXP");
     test_level(level, solution, &input_list);
   }
 
-  TEST_F(CIDPatchTestsTWS, Level2) {
-    LoadLevelTws(2);
+  TEST_F(CIDPatchTestsTWS, TankCloneRotation) {
+    LoadLevelTws("FKZC");
     test_level(level, solution, &input_list);
   }
 
-  TEST_F(CIDPatchTestsTWS, Level3) {
-    LoadLevelTws(3);
+  TEST_F(CIDPatchTestsTWS, TankTurnsAndCloning) {
+    LoadLevelTws("TAFK");
     test_level(level, solution, &input_list);
   }
 
-  TEST_F(CIDPatchTestsTWS, Level4) {
-    LoadLevelTws(4);
+  TEST_F(CIDPatchTestsTWS, ChipRemovingSliplist) {
+    LoadLevelTws("DZGZ");
     test_level(level, solution, &input_list);
   }
 
-  TEST_F(CIDPatchTestsTWS, Level5) {
-    LoadLevelTws(5);
+  TEST_F(CIDPatchTestsTWS, TankTeleporterNoReverse) {
+    LoadLevelTws("DYOA");
     test_level(level, solution, &input_list);
   }
 
-  TEST_F(CIDPatchTestsTWS, Level6) {
-    LoadLevelTws(6);
+  TEST_F(CIDPatchTestsTWS, ChipWinsSquished) {
+    LoadLevelTws("KOJB");
     test_level(level, solution, &input_list);
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(2, 1)), TileID_actor_with_dir(ACTOR_CHIP, DIRECTION_SOUTH));
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(2, 2)), TileID_actor_with_dir(ACTOR_CHIP, DIRECTION_SOUTH));
@@ -101,8 +101,8 @@ namespace {
     EXPECT_TRUE(found);
   }
 
-  TEST_F(CIDPatchTestsTWS, Level7) {
-    LoadLevelTws(7);
+  TEST_F(CIDPatchTestsTWS, ChipWinsSquishedV2) {
+    LoadLevelTws("WGQZ");
     test_level(level, solution, &input_list);
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(2, 1)), TileID_actor_with_dir(ACTOR_CHIP, DIRECTION_SOUTH));
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(2, 2)), TileID_actor_with_dir(ACTOR_CHIP, DIRECTION_SOUTH));
@@ -118,7 +118,7 @@ namespace {
     }
     EXPECT_TRUE(found);
 
-    LoadLevelTws(7);
+    LoadLevelTws("WGQZ");
     TickLevel(INPUT_NIL);
     TickLevel(INPUT_WEST);
     TickLevel(INPUT_SOUTH);
@@ -128,8 +128,8 @@ namespace {
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(2, 2)), TILE_EXIT);
   }
 
-  TEST_F(CIDPatchTestsTWS, Level8) {
-    Result_LevelPtr res_level = LevelMetadata_make_level(LevelSet_get_level(level_set, 8 - 1), &ms_logic);
+  TEST_F(CIDPatchTestsTWS, TankTopV1) {
+    Result_LevelPtr res_level = LevelMetadata_make_level(LevelSet_get_level_by_pass(level_set, "WAXP"), &ms_logic);
     ASSERT_TRUE(res_level.success);
     level = res_level.value;
 
@@ -141,8 +141,8 @@ namespace {
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(1, 1)), TileID_actor_with_dir(ACTOR_TANK, DIRECTION_SOUTH));
   }
 
-  TEST_F(CIDPatchTestsTWS, Level9) {
-    Result_LevelPtr res_level = LevelMetadata_make_level(LevelSet_get_level(level_set, 9 - 1), &ms_logic);
+  TEST_F(CIDPatchTestsTWS, TankClonerStall) {
+    Result_LevelPtr res_level = LevelMetadata_make_level(LevelSet_get_level_by_pass(level_set, "EPUM"), &ms_logic);
     ASSERT_TRUE(res_level.success);
     level = res_level.value;
 
@@ -173,8 +173,8 @@ namespace {
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(2, 1)), TileID_actor_with_dir(ACTOR_TANK, DIRECTION_SOUTH));
   }
 
-  TEST_F(CIDPatchTestsTWS, Level10) {
-    Result_LevelPtr res_level = LevelMetadata_make_level(LevelSet_get_level(level_set, 10 - 1), &ms_logic);
+  TEST_F(CIDPatchTestsTWS, TankTopV2) {
+    Result_LevelPtr res_level = LevelMetadata_make_level(LevelSet_get_level_by_pass(level_set, "OJBB"), &ms_logic);
     ASSERT_TRUE(res_level.success);
     level = res_level.value;
 
@@ -192,8 +192,8 @@ namespace {
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(0, 1)), TILE_FORCE_FLOOR_NORTH);
   }
 
-  TEST_F(CIDPatchTestsTWS, Level11) {
-    Result_LevelPtr res_level = LevelMetadata_make_level(LevelSet_get_level(level_set, 11 - 1), &ms_logic);
+  TEST_F(CIDPatchTestsTWS, TankTopV3) {
+    Result_LevelPtr res_level = LevelMetadata_make_level(LevelSet_get_level_by_pass(level_set, "JGZM"), &ms_logic);
     ASSERT_TRUE(res_level.success);
     level = res_level.value;
 
@@ -208,8 +208,8 @@ namespace {
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(0, 2)), TileID_actor_with_dir(ACTOR_TANK, DIRECTION_SOUTH));
   }
 
-  TEST_F(CIDPatchTestsTWS, Level12) {
-    Result_LevelPtr res_level = LevelMetadata_make_level(LevelSet_get_level(level_set, 12 - 1), &ms_logic);
+  TEST_F(CIDPatchTestsTWS, TankTopV4) {
+    Result_LevelPtr res_level = LevelMetadata_make_level(LevelSet_get_level_by_pass(level_set, "HRSB"), &ms_logic);
     ASSERT_TRUE(res_level.success);
     level = res_level.value;
 
@@ -232,8 +232,8 @@ namespace {
     // I'm honestly unsure what's up with the other 3 tanks so I don't know what to do with them
   }
 
-  TEST_F(CIDPatchTestsTWS, Level13) {
-    Result_LevelPtr res_level = LevelMetadata_make_level(LevelSet_get_level(level_set, 13 - 1), &ms_logic);
+  TEST_F(CIDPatchTestsTWS, TankTopV5) {
+    Result_LevelPtr res_level = LevelMetadata_make_level(LevelSet_get_level_by_pass(level_set, "DKHH"), &ms_logic);
     ASSERT_TRUE(res_level.success);
     level = res_level.value;
 
@@ -255,8 +255,8 @@ namespace {
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(1, 1)), TILE_BUTTON_TANK);
   }
 
-  TEST_F(CIDPatchTestsTWS, Level14) {
-    LoadLevelTws(14);
+  TEST_F(CIDPatchTestsTWS, NonexistenceMonsterRemoval) {
+    LoadLevelTws("NONE");
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(0, 0)), TILE_FLOOR);
 
     test_level(level, solution, &input_list);
@@ -272,8 +272,8 @@ namespace {
     }
   }
 
-  TEST_F(CIDPatchTestsTWS, Level16) {
-    LoadLevelTws(16);
+  TEST_F(CIDPatchTestsTWS, ConvergenceV2) {
+    LoadLevelTws("TALV");
     test_level(level, solution, &input_list);
 
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(30, 28)), TileID_actor_with_dir(ACTOR_CHIP, DIRECTION_NORTH));
@@ -286,11 +286,11 @@ namespace {
     }
   }
 
-  TEST_F(CIDPatchTestsTWS, Level17) {
-    LoadLevelTws(17);
+  TEST_F(CIDPatchTestsTWS, TankStack) {
+    LoadLevelTws("RZXN");
     test_level(level, solution, &input_list);
 
-    LoadLevelTws(17);
+    LoadLevelTws("RZXN");
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(1, 0)), TILE_TRAP);
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(1, 1)), TileID_actor_with_dir(ACTOR_TANK, DIRECTION_NORTH));
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(1, 2)), TILE_THIN_WALL_WEST);
@@ -314,8 +314,8 @@ namespace {
     EXPECT_EQ(Level_get_win_state(level), TRIRES_DIED);
   }
 
-  TEST_F(CIDPatchTestsTWS, Level18) {
-    LoadLevelTws(18);
+  TEST_F(CIDPatchTestsTWS, TankStackV2) {
+    LoadLevelTws("VVBR");
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(0, 0)), TILE_FLOOR);
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(1, 0)), TileID_actor_with_dir(ACTOR_TANK, DIRECTION_WEST));
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(2, 0)), TILE_THIN_WALL_SOUTH_EAST);
@@ -326,8 +326,8 @@ namespace {
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(2, 0)), TileID_actor_with_dir(ACTOR_TANK, DIRECTION_EAST));
   }
 
-  TEST_F(CIDPatchTestsTWS, Level19) {
-    LoadLevelTws(19);
+  TEST_F(CIDPatchTestsTWS, SpontaneousGeneration) {
+    LoadLevelTws("GYEI");
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(0, 0)), TileID_actor_with_dir(ACTOR_TANK, DIRECTION_EAST));
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(1, 0)), TILE_BUTTON_TRAP);
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(2, 0)), TILE_BUTTON_CLONE);
@@ -338,8 +338,8 @@ namespace {
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(2, 0)), TileID_actor_with_dir(ACTOR_TANK, DIRECTION_EAST));
   }
 
-  TEST_F(CIDPatchTestsTWS, Level20) {
-    LoadLevelTws(20);
+  TEST_F(CIDPatchTestsTWS, SpontaneousGenerationSlide) {
+    LoadLevelTws("IFWK");
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(0, 0)), TileID_actor_with_dir(ACTOR_TANK, DIRECTION_EAST));
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(1, 0)), TILE_FORCE_FLOOR_EAST);
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(2, 0)), TILE_BUTTON_CLONE);
@@ -350,8 +350,8 @@ namespace {
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(2, 0)), TILE_BUTTON_CLONE);
   }
 
-  TEST_F(CIDPatchTestsTWS, Level21) {
-    LoadLevelTws(21);
+  TEST_F(CIDPatchTestsTWS, SpontaneousGenerationTeleport) {
+    LoadLevelTws("HRHD");
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(0, 0)), TILE_TELEPORT);
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(1, 0)), TILE_BUTTON_CLONE);
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(0, 1)), TileID_actor_with_dir(ACTOR_TANK, DIRECTION_EAST));
@@ -364,8 +364,8 @@ namespace {
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(1, 1)), TILE_TELEPORT);
   }
 
-  TEST_F(CIDPatchTestsTWS, Level22) {
-    LoadLevelTws(22);
+  TEST_F(CIDPatchTestsTWS, SpontaneousGenerationTankTopIceTurn) { //Sure is a name, it should not actually invoke tank top
+    LoadLevelTws("JYTP");
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(0, 0)), TILE_ICE_CORNER_SOUTH_EAST);
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(1, 0)), TILE_BUTTON_CLONE);
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(0, 1)), TileID_actor_with_dir(ACTOR_TANK, DIRECTION_NORTH));
@@ -376,8 +376,8 @@ namespace {
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(0, 1)), TILE_THIN_WALL_SOUTH);
   }
 
-  TEST_F(CIDPatchTestsTWS, Level23) {
-    Result_LevelPtr res_level = LevelMetadata_make_level(LevelSet_get_level(level_set, 23 - 1), &ms_logic);
+  TEST_F(CIDPatchTestsTWS, SpontaneousGenerationCloner) {
+    Result_LevelPtr res_level = LevelMetadata_make_level(LevelSet_get_level_by_pass(level_set, "CXBM"), &ms_logic);
     ASSERT_TRUE(res_level.success);
     level = res_level.value;
 
@@ -416,13 +416,13 @@ namespace {
     EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(1, 3)), TILE_FLOOR);
   }
 
-  TEST_F(CIDPatchTestsTWS, Level24) {
-    LoadLevelTws(24);
+  TEST_F(CIDPatchTestsTWS, IcyRedux) {
+    LoadLevelTws("EIAF");
     test_level(level, solution, &input_list);
   }
 
-  TEST_F(CIDPatchTestsTWS, Level25) {
-    Result_LevelPtr res_level = LevelMetadata_make_level(LevelSet_get_level(level_set, 25 - 1), &ms_logic);
+  TEST_F(CIDPatchTestsTWS, ChipStartsInExit) {
+    Result_LevelPtr res_level = LevelMetadata_make_level(LevelSet_get_level_by_pass(level_set, "HLZL"), &ms_logic);
     ASSERT_TRUE(res_level.success);
     level = res_level.value;
 
@@ -440,12 +440,5 @@ namespace {
     EXPECT_EQ(Level_get_win_state(level), TRIRES_NOTHING);
     TickLevel(INPUT_WEST);
     EXPECT_EQ(Level_get_win_state(level), TRIRES_SUCCESS);
-  }
-
-  TEST_F(CIDPatchTestsTWS, Level40) {
-    LoadLevelTws(40);
-    test_level(level, solution, &input_list);
-    EXPECT_EQ(Level_get_win_state(level), TRIRES_SUCCESS);
-    EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(5, 3)), TILE_TOGGLE_DOOR_OPEN);
   }
 }

@@ -238,5 +238,7 @@ namespace {
   TEST_F(RegressionDatLogicTestMS, MismatchedCloneIntoDirection) {
     LoadLevelTWS("YMEG");
     test_level(level, solution, &input_list);
+
+    EXPECT_EQ(Level_get_top_terrain(level, Position_from_xy(5, 3)), TILE_TOGGLE_DOOR_OPEN);
   }
 }
